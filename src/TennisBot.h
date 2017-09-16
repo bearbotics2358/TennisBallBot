@@ -14,6 +14,7 @@
 #include "JrimmyGyro.h"
 #include "SwerveModule.h"
 #include "SwerveDrive.h"
+#include "Shooter.h"
 #include "LightRingController.h"
 #include "SmartDashboard/SmartDashboard.h"
 #include "SmartDashboard/SendableChooser.h"
@@ -46,6 +47,8 @@ private:
 	SwerveModule a_BackRight;
 
 	SwerveDrive a_Drive;
+
+	Shooter a_Shooter;
 
 	LightRingController a_LRC;
 

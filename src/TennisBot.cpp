@@ -11,8 +11,10 @@
 #include "TennisBot.h"
 
 TennisBot::TennisBot(void):
-a_Joystick(JOYSTICK_PORT),
-a_Joystick2(JOYSTICKTWO_PORT),
+
+// dont forget to make sure the sticks are on the right ports in the DS
+a_Joystick(JOYSTICK_PORT), // this should be the stick w/ twist
+a_Joystick2(JOYSTICKTWO_PORT), // this should be the gamepad
 
 a_PDP(PDP_PORT),
 
@@ -21,11 +23,13 @@ a_FrontLeft(FRONT_LEFT_TURN, FRONT_LEFT_MOVE),
 a_BackLeft(BACK_LEFT_TURN, BACK_LEFT_MOVE),
 a_BackRight(BACK_RIGHT_TURN, BACK_RIGHT_MOVE),
 a_Drive(a_FrontRight, a_FrontLeft, a_BackLeft, a_BackRight, CHASSIS_LENGTH, CHASSIS_WIDTH),
+a_Shooter(SHOOTER_PORT),
 a_LRC(),
 a_Accelerometer(I2C::kMXP,ADXL345_I2C::kRange_2G,0x53), // was 0x1D
 a_Gyro(I2C::kMXP) // currently in upside down config
 
 {
+	// runs on construct
 	SmartDashboard::init();
 	a_Drive.Init();
 	PREFS_FUNCTIONS // macro to invert drive
@@ -45,20 +49,21 @@ void TennisBot::RobotPeriodic()
 }
 
 void TennisBot::DisabledInit()
-{
-
-}
+{}
 
 void TennisBot::DisabledPeriodic()
 {
+	SmartDashboard::PutString("Enabled: ", "False");
 
 	a_Drive.Update(0,0,0,0);
-	SmartDashboard::PutNumber("gyro reg 0", a_Gyro.GetReg0());
 
 	a_LRC.SetColor(0,0,100,0);
 	a_LRC.SetColor(1,0,100,0);
 	a_LRC.SetColor(2,0,100,0);
+
+	SmartDashboard::PutNumber("gyro reg 0", a_Gyro.GetReg0());
 	SmartDashboard::PutNumber("Gyro, yum", a_Gyro.GetAngle());
+
 	if(a_Joystick.GetRawButton(1)) {
 		a_Gyro.Cal();
 	}
@@ -74,22 +79,14 @@ void TennisBot::DisabledPeriodic()
 }
 
 void TennisBot::AutonomousInit()
-{
-	// a_Gyro.Cal();
-}
+{}
 
 void TennisBot::AutonomousPeriodic()
-{
-	SmartDashboard::PutNumber("Drive distance Y", a_Drive.GetDistanceY());
-	SmartDashboard::PutNumber("Back Left", a_BackLeft.GetDistanceY());
-	SmartDashboard::PutNumber("Back Right",a_BackRight.GetDistanceY());
-	SmartDashboard::PutNumber("Front Left", a_FrontLeft.GetDistanceY());
-	SmartDashboard::PutNumber("Front Right",  a_FrontRight.GetDistanceY());
-}
+{}
 
 void TennisBot::TeleopInit()
 {
-
+	SmartDashboard::PutString("Enabled: ", "True");
 }
 
 void TennisBot::TeleopPeriodic()
@@ -106,10 +103,12 @@ void TennisBot::TeleopPeriodic()
 		a_Drive.Zero();
 	}
 
-	if(a_Joystick2.GetRawButton(1) && a_Joystick2.GetRawAxis(2) >= .9) {
-		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, 1);
-		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, 1);
+	if(a_Joystick2.GetRawButton(1)) { // gamepad "a" button; enable button for shooter (NOT CURRENTLY CORRECT, NEED TO TEST)
+		a_Shooter.Set(a_Joystick2.GetRawAxis(2)); // gamepad right trigger (check for resting value before operating, may need to use 1-stick to invert)
+		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, a_Joystick2.GetRawAxis(2));
+		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, a_Joystick2.GetRawAxis(2));
 	} else {
+		a_Shooter.Set(0);
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, 0);
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, 0);
 	}
@@ -117,6 +116,16 @@ void TennisBot::TeleopPeriodic()
 	if(a_Joystick.GetRawButton(1)) {
 		a_Gyro.Cal();
 	}
+
+	float divider = 1;
+	if(a_Joystick.GetRawButton(2)) {
+		divider = 10;
+	} else {
+		divider = 1;
+	}
+
+	// a_Drive.Update(a_Joystick.GetX() / divider,a_Joystick.GetY() / divider,a_Joystick.GetZ() / (divider * 2),a_Gyro.GetAngle());
+	a_Drive.Update(a_Joystick.GetX() / divider,a_Joystick.GetY() / divider,a_Joystick.GetZ() / (divider * 2),0.0);
 
 	SmartDashboard::PutNumber("Gyro, yum", a_Gyro.GetAngle());
 
@@ -137,13 +146,9 @@ void TennisBot::TeleopPeriodic()
 
 
 void TennisBot::TestInit()
-{
-
-}
+{}
 
 void TennisBot::TestPeriodic()
-{
-
-}
+{}
 
 START_ROBOT_CLASS(TennisBot);

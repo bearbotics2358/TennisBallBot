@@ -8,6 +8,8 @@
 
 #define PDP_PORT 3
 
+#define SHOOTER_PORT 17
+
 #define LIGHT_RING_CONTROLLER_ADDRESS 0x4
 
 #define FRONT_RIGHT_MOVE 14

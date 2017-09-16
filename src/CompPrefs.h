@@ -19,6 +19,12 @@
 #define BACK_LEFT_DRIVE_PIDF 1,0.0005,0,1.0
 #define BACK_LEFT_IZONE 0
 
+#define SHOOTER_P 150.0
+#define SHOOTER_I 0.5
+#define SHOOTER_D 0.5
+#define SHOOTER_F 1.0
+#define SHOOTER_IZONE 0
+
 #define TURN_ENCODER_TYPE CANTalon::PulseWidth
 #define ABSOLUTE_CONV_FACTOR (1 / 360.0)
 
