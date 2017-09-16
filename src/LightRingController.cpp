@@ -9,7 +9,7 @@ LightRingController::LightRingController()
 }
 
 
-//Our current LRC's support light rings on pins 0, 1, and 2- don't try to set the color of other ones, please
+// Our current LRC's support light rings on pins 0, 1, and 2- don't try to set the color of other ones, please
 bool LightRingController::SetColor(int device, int r, int g, int b) {
 	uint8_t out[4];
 	out[0] = device;

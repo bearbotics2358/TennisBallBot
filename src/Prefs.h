@@ -1,14 +1,6 @@
-/*
- * Prefs.h
- *
- *  Created on: Jan 14, 2016
- *      Author: hstechclub
- */
-
 #ifndef SRC_PREFS_H_
 #define SRC_PREFS_H_
 
-// #include "PracticePrefs.h"
 #include "CompPrefs.h"
 
 #define JOYSTICK_PORT 0

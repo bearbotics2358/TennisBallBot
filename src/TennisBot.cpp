@@ -23,11 +23,9 @@ a_BackRight(BACK_RIGHT_TURN, BACK_RIGHT_MOVE),
 a_Drive(a_FrontRight, a_FrontLeft, a_BackLeft, a_BackRight, CHASSIS_LENGTH, CHASSIS_WIDTH),
 a_LRC(),
 a_Accelerometer(I2C::kMXP,ADXL345_I2C::kRange_2G,0x53), // was 0x1D
-a_Gyro(I2C::kMXP)
+a_Gyro(I2C::kMXP) // currently in upside down config
 
 {
-	rc = 0;
-	tState = 0;
 	SmartDashboard::init();
 	a_Drive.Init();
 	PREFS_FUNCTIONS // macro to invert drive
@@ -78,8 +76,6 @@ void TennisBot::DisabledPeriodic()
 void TennisBot::AutonomousInit()
 {
 	// a_Gyro.Cal();
-	tState = 0;
-	// a_Autonomous.Init();
 }
 
 void TennisBot::AutonomousPeriodic()

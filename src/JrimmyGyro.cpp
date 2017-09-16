@@ -1,5 +1,5 @@
-/* JrimmyGyro.cpp
-
+/*
+ * JrimmyGyro.cpp
  */
 
 

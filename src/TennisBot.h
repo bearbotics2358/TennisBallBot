@@ -52,11 +52,6 @@ private:
 	ADXL345_I2C a_Accelerometer;
 
 	JrimmyGyro a_Gyro;
-
-	int rc;
-
-	double tState;
-
 };
 
 #endif
