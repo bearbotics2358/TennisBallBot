@@ -114,7 +114,7 @@ void TennisBot::TeleopPeriodic()
 	}
 
 	if(a_Joystick.GetRawButton(1)) {
-		a_Gyro.Cal();
+		a_Gyro.Cal(); // just an FYI Alexis, I would use zero in periodic, not cal, as cal can cause momentary control loss
 	}
 
 	float divider = 1;
