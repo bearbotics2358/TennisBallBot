@@ -45,7 +45,6 @@ void TennisBot::RobotPeriodic()
 	a_Gyro.Update();
 	// printf("Gyro Value: %f\n", a_Gyro.GetAngle());
 	a_Accelerometer.GetAccelerations();
-
 }
 
 void TennisBot::DisabledInit()
@@ -65,7 +64,7 @@ void TennisBot::DisabledPeriodic()
 	SmartDashboard::PutNumber("Gyro, yum", a_Gyro.GetAngle());
 
 	if(a_Joystick.GetRawButton(1)) {
-		a_Gyro.Cal();
+		a_Gyro.Cal(); // you can use cal here b/c you have the time to
 	}
 	SmartDashboard::PutNumber("Front Right Speed", a_FrontRight.GetSpeed());
 	SmartDashboard::PutNumber("Front Left Speed", a_FrontLeft.GetSpeed());
@@ -99,26 +98,27 @@ void TennisBot::TeleopPeriodic()
 	a_LRC.SetColor(1,0,60,0);
 	a_LRC.SetColor(2,0,60,0);
 
-	if(a_Joystick.GetRawButton(7)) {
-		a_Drive.Zero();
-	}
-
-	if(a_Joystick2.GetRawButton(1)) { // gamepad "a" button; enable button for shooter (NOT CURRENTLY CORRECT, NEED TO TEST)
-		a_Shooter.Set(a_Joystick2.GetRawAxis(2)); // gamepad right trigger (check for resting value before operating, may need to use 1-stick to invert)
+	if(a_Joystick2.GetRawButton(1)) { // gamepad "a" button; enable button for shooter (NOT CURRENTLY CORRECT, NEED TO TEST) [update: i tested it, then forgot about it]
+		// a_Shooter.Set(a_Joystick2.GetRawAxis(2)); // gamepad left trigger
+		// a_Shooter.Set(0);
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, a_Joystick2.GetRawAxis(2));
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, a_Joystick2.GetRawAxis(2));
 	} else {
-		a_Shooter.Set(0);
+		// a_Shooter.Set(0);
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, 0);
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, 0);
 	}
 
+
 	if(a_Joystick.GetRawButton(1)) {
 		a_Gyro.Cal(); // just an FYI Alexis, I would use zero in periodic, not cal, as cal can cause momentary control loss
 	}
+	if(a_Joystick.GetRawButton(12)) {
+		a_Gyro.Zero(); // note to self: use zero here b/c cal takes a while to complete
+	}
 
 	float divider = 1;
-	if(a_Joystick.GetRawButton(2)) {
+	if(a_Joystick.GetRawButton(11)) {
 		divider = 10;
 	} else {
 		divider = 1;
