@@ -98,7 +98,9 @@ void TennisBot::TeleopPeriodic()
 	a_LRC.SetColor(1,0,60,0);
 	a_LRC.SetColor(2,0,60,0);
 
-	if(a_Joystick2.GetRawButton(1)) { // gamepad "a" button; enable button for shooter (NOT CURRENTLY CORRECT, NEED TO TEST) [update: i tested it, then forgot about it]
+	if(a_Joystick2.GetRawButton(1)) { // To be uncommented in local deploy
+
+		// gamepad "a" button; enable button for shooter (NOT CURRENTLY CORRECT, NEED TO TEST) [update: i tested it, then forgot about it]
 		// a_Shooter.Set(a_Joystick2.GetRawAxis(2)); // gamepad left trigger
 		// a_Shooter.Set(0);
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, a_Joystick2.GetRawAxis(2));
@@ -109,23 +111,19 @@ void TennisBot::TeleopPeriodic()
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, 0);
 	}
 
-
-	if(a_Joystick.GetRawButton(1)) {
-		a_Gyro.Cal(); // just an FYI Alexis, I would use zero in periodic, not cal, as cal can cause momentary control loss
-	}
-	if(a_Joystick.GetRawButton(12)) {
+	if(a_Joystick.GetRawButton(7)) {
 		a_Gyro.Zero(); // note to self: use zero here b/c cal takes a while to complete
 	}
 
 	float divider = 1;
-	if(a_Joystick.GetRawButton(11)) {
+	if(a_Joystick.GetRawButton(8)) {
 		divider = 10;
 	} else {
 		divider = 1;
 	}
 
 	// a_Drive.Update(a_Joystick.GetX() / divider,a_Joystick.GetY() / divider,a_Joystick.GetZ() / (divider * 2),a_Gyro.GetAngle());
-	a_Drive.Update(a_Joystick.GetX() / divider,a_Joystick.GetY() / divider,a_Joystick.GetZ() / (divider * 2),0.0);
+	a_Drive.Update((a_Joystick.GetX() / divider),(a_Joystick.GetY() / divider),(a_Joystick.GetZ() / (divider * 2)),0.0);
 
 	SmartDashboard::PutNumber("Gyro, yum", a_Gyro.GetAngle());
 
