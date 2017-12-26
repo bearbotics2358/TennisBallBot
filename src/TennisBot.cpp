@@ -102,7 +102,7 @@ void TennisBot::TeleopPeriodic()
 
 		// gamepad "a" button; enable button for shooter (NOT CURRENTLY CORRECT, NEED TO TEST) [update: i tested it, then forgot about it]
 		// a_Shooter.Set(a_Joystick2.GetRawAxis(2)); // gamepad left trigger
-		// a_Shooter.Set(0);
+		// a_Shooter.Set((a_Joystick2.GetRawAxis(2) * 2));
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kLeftRumble, a_Joystick2.GetRawAxis(2));
 		a_Joystick2.SetRumble(GenericHID::RumbleType::kRightRumble, a_Joystick2.GetRawAxis(2));
 	} else {
@@ -122,8 +122,8 @@ void TennisBot::TeleopPeriodic()
 		divider = 1;
 	}
 
-	// a_Drive.Update(a_Joystick.GetX() / divider,a_Joystick.GetY() / divider,a_Joystick.GetZ() / (divider * 2),a_Gyro.GetAngle());
-	a_Drive.Update((a_Joystick.GetX() / divider),(a_Joystick.GetY() / divider),(a_Joystick.GetZ() / (divider * 2)),0.0);
+	a_Drive.Update(a_Joystick.GetX() / divider,a_Joystick.GetY() / divider,a_Joystick.GetZ() / (divider * 2),a_Gyro.GetAngle());
+	// a_Drive.Update((a_Joystick.GetX() / divider),(a_Joystick.GetY() / divider),(a_Joystick.GetZ() / (divider * 2)),0.0);
 
 	SmartDashboard::PutNumber("Gyro, yum", a_Gyro.GetAngle());
 
@@ -141,7 +141,6 @@ void TennisBot::TeleopPeriodic()
 	SmartDashboard::PutNumber("Back Left Speed", a_BackLeft.GetSpeed());
 
 }
-
 
 void TennisBot::TestInit()
 {}
