@@ -25,7 +25,7 @@
 #define SHOOTER_F 1.0
 #define SHOOTER_IZONE 0
 
-#define TURN_ENCODER_TYPE CANTalon::PulseWidth
+#define TURN_ENCODER_TYPE FeedbackDevice::PulseWidthEncodedPosition
 #define ABSOLUTE_CONV_FACTOR (1 / 360.0)
 
 #define PREFS_FUNCTIONS a_BackRight.InvertDriveMotor(); a_FrontRight.InvertDriveMotor();

@@ -24,7 +24,6 @@ a_BackLeft(BACK_LEFT_TURN, BACK_LEFT_MOVE),
 a_BackRight(BACK_RIGHT_TURN, BACK_RIGHT_MOVE),
 a_Drive(a_FrontRight, a_FrontLeft, a_BackLeft, a_BackRight, CHASSIS_LENGTH, CHASSIS_WIDTH),
 a_Shooter(SHOOTER_PORT),
-a_LRC(),
 a_Accelerometer(I2C::kMXP,ADXL345_I2C::kRange_2G,0x53), // was 0x1D
 a_Gyro(I2C::kMXP) // currently in upside down config
 
@@ -55,10 +54,6 @@ void TennisBot::DisabledPeriodic()
 	SmartDashboard::PutString("Enabled: ", "False");
 
 	a_Drive.Update(0,0,0,0);
-
-	a_LRC.SetColor(0,0,100,0);
-	a_LRC.SetColor(1,0,100,0);
-	a_LRC.SetColor(2,0,100,0);
 
 	SmartDashboard::PutNumber("gyro reg 0", a_Gyro.GetReg0());
 	SmartDashboard::PutNumber("Gyro, yum", a_Gyro.GetAngle());
@@ -93,10 +88,6 @@ void TennisBot::TeleopPeriodic()
 	SmartDashboard::PutNumber("Accelerometer X", a_Accelerometer.GetX());
 	SmartDashboard::PutNumber("Accelerometer Y", a_Accelerometer.GetY());
 	SmartDashboard::PutNumber("Accelerometer Z", a_Accelerometer.GetZ());
-
-	a_LRC.SetColor(0,0,60,0);
-	a_LRC.SetColor(1,0,60,0);
-	a_LRC.SetColor(2,0,60,0);
 
 	if(a_Joystick2.GetRawButton(1)) { // To be uncommented in local deploy
 

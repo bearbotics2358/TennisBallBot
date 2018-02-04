@@ -9,7 +9,7 @@
 #define SRC_SHOOTER_H_
 
 #include <WPILib.h>
-#include "CANTalon.h"
+#include "ctre/Phoenix.h"
 #include "Prefs.h"
 
 class Shooter // Simple PIDF flywheel shooter
@@ -28,7 +28,7 @@ public:
 
 	void SetWheelPIDF(float wheelP, float wheelI, float wheelD, float wheelF);
 private:
-	CANTalon a_ShooterTennis;
+	WPI_TalonSRX a_ShooterTennis;
 };
 
 #endif /* SRC_SHOOTER_H_ */

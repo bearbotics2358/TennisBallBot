@@ -1,15 +1,8 @@
-/*
- * SwerveModule.h
- *
- *  Created on: Mar 21, 2016
- *      Author: hstechclub
- */
-
 #pragma once
 
 #include <WPILib.h>
 #include <SpeedController.h>
-#include <CANTalon.h>
+#include "ctre/Phoenix.h"
 #include "Prefs.h"
 
 class SwerveModule // Swerve module that has 2 motors- one for angle PID, other for speed PIDF
@@ -40,8 +33,11 @@ public:
 	void SetIzone(float izone);
 
 private:
-	CANTalon a_TurnMotor;
-	CANTalon a_DriveMotor;
+	WPI_TalonSRX a_TurnMotor;
+	WPI_TalonSRX a_DriveMotor;
+	int kSlotIdx = 0;
+	int kPIDLoopIdx = 0;
+	int kTimeoutMs = 10;
 	float distanceX;
 	float distanceY;
 	float lastPos;

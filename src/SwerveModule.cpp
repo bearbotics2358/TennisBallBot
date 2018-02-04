@@ -1,10 +1,3 @@
-/*
- * SwerveModule.cpp
- *
- *  Created on: Mar 21, 2016
- *      Author: hstechclub
- */
-
 #include "SwerveModule.h"
 
 
@@ -14,21 +7,23 @@ SwerveModule::SwerveModule(uint32_t turnMotorPort, uint32_t driveMotorPort)
 : a_TurnMotor(turnMotorPort),
   a_DriveMotor(driveMotorPort)
 {
-	a_TurnMotor.SetControlMode(CANTalon::kPosition);
-	a_TurnMotor.SetFeedbackDevice(TURN_ENCODER_TYPE);
-	a_TurnMotor.SetSensorDirection(false);
-	a_TurnMotor.SetP(0);
-	a_TurnMotor.SetI(0);
-	a_TurnMotor.SetD(0);
+	kSlotIdx = 0;
+	kPIDLoopIdx = 0;
+	kTimeoutMs = 10;
+
+	a_TurnMotor.ConfigSelectedFeedbackSensor(TURN_ENCODER_TYPE, kPIDLoopIdx, kTimeoutMs);
+	a_TurnMotor.SetSensorPhase(false);
+	a_TurnMotor.Config_kP(kSlotIdx, 0, kTimeoutMs);
+	a_TurnMotor.Config_kI(kSlotIdx, 0, kTimeoutMs);
+	a_TurnMotor.Config_kD(kSlotIdx, 0, kTimeoutMs);
 	a_TurnMotor.Set(0);
 
-	a_DriveMotor.SetControlMode(CANTalon::kSpeed);
-	a_DriveMotor.SetFeedbackDevice(CANTalon::QuadEncoder);
-	a_DriveMotor.ConfigEncoderCodesPerRev(20);
-	a_DriveMotor.SetSensorDirection(false);
-	a_DriveMotor.SetP(0);
-	a_DriveMotor.SetI(0);
-	a_DriveMotor.SetD(0);
+	a_DriveMotor.ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, kPIDLoopIdx, kTimeoutMs);
+	// a_DriveMotor.ConfigEncoderCodesPerRev(20);
+	a_DriveMotor.SetSensorPhase(false);
+	a_DriveMotor.Config_kP(kSlotIdx, 0, kTimeoutMs);
+	a_DriveMotor.Config_kI(kSlotIdx, 0, kTimeoutMs);
+	a_DriveMotor.Config_kD(kSlotIdx, 0, kTimeoutMs);
 	a_DriveMotor.Set(0);
 
 	distanceX = 0.0;
@@ -40,7 +35,7 @@ SwerveModule::SwerveModule(uint32_t turnMotorPort, uint32_t driveMotorPort)
 
 void SwerveModule::Update(float angle, float speed, float offset, float gyroValue)
 {
-	float currentPos = fabs(a_DriveMotor.GetEncPosition());
+	float currentPos = fabs(a_DriveMotor.GetSelectedSensorPosition(0));
 	float posDiff = currentPos - lastPos;
 	// distance the wheel traveled since last cycle
 	
@@ -67,8 +62,8 @@ void SwerveModule::Update(float angle, float speed, float offset, float gyroValu
 	*/
 	
 	// printf("The motor should be at speed: %f\n", speed);
-	a_TurnMotor.Set((angle + offset) * ABSOLUTE_CONV_FACTOR);
-	a_DriveMotor.Set(speed * MAX_RPM); 
+	a_TurnMotor.Set(ControlMode::Position, (angle + offset) * ABSOLUTE_CONV_FACTOR);
+	a_DriveMotor.Set(ControlMode::Velocity, speed * MAX_RPM);
 	// native arg units are encoder delta / 0.1s, but we told the CANTalon our encodercodes per revolution and it uses RPM now
 	lastPos = currentPos;
 
@@ -76,12 +71,12 @@ void SwerveModule::Update(float angle, float speed, float offset, float gyroValu
 
 float SwerveModule::GetAngle()
 {
-	return a_TurnMotor.GetPosition() / ABSOLUTE_CONV_FACTOR;
+	return a_TurnMotor.GetSelectedSensorPosition(0) / ABSOLUTE_CONV_FACTOR;
 }
 
 float SwerveModule::GetSpeed()
 {
-	return a_DriveMotor.GetSpeed();
+	return a_DriveMotor.GetSensorCollection().GetPulseWidthVelocity();
 }
 
 float SwerveModule::GetDistanceX()
@@ -108,17 +103,17 @@ void SwerveModule::ResetDistances()
 {
 	ResetDistanceX();
 	ResetDistanceY();
-	a_DriveMotor.SetEncPosition(0);
+	a_DriveMotor.GetSensorCollection().SetQuadraturePosition(0, kTimeoutMs);
 }
 
 void SwerveModule::InvertQuad()
 {
-	a_DriveMotor.SetSensorDirection(true);
+	a_DriveMotor.SetSensorPhase(true);
 }
 
 void SwerveModule::InvertAnalog()
 {
-	a_TurnMotor.SetSensorDirection(true);
+	a_TurnMotor.SetSensorPhase(true);
 }
 
 void SwerveModule::InvertDriveMotor()
@@ -133,21 +128,21 @@ void SwerveModule::InvertTurnMotor()
 
 void SwerveModule::SetTurnPID(float turnP, float turnI, float turnD)
 {
-	a_TurnMotor.SetP(turnP);
-	a_TurnMotor.SetI(turnI);
-	a_TurnMotor.SetD(turnD);
+	a_TurnMotor.Config_kP(kSlotIdx, turnP, kTimeoutMs);
+	a_TurnMotor.Config_kI(kSlotIdx, turnI, kTimeoutMs);
+	a_TurnMotor.Config_kD(kSlotIdx, turnD, kTimeoutMs);
 }
 
 void SwerveModule::SetDrivePIDF(float driveP, float driveI, float driveD, float driveF)
 {
-	a_DriveMotor.SetP(driveP);
-	a_DriveMotor.SetI(driveI);
-	a_DriveMotor.SetD(driveD);
-	a_DriveMotor.SetF(driveF);
+	a_DriveMotor.Config_kP(kSlotIdx, driveP, kTimeoutMs);
+	a_DriveMotor.Config_kI(kSlotIdx, driveI, kTimeoutMs);
+	a_DriveMotor.Config_kD(kSlotIdx, driveD, kTimeoutMs);
+	a_DriveMotor.Config_kF(kSlotIdx, driveF, kTimeoutMs);
 }
 
 void SwerveModule::SetIzone(float izone)
 {
-	a_DriveMotor.SetIzone(izone);
+	a_DriveMotor.Config_IntegralZone(kSlotIdx, izone, kTimeoutMs);
 	// just here as a reminder- this sets an area for I to accumulate outside of, so that it wouldn't accumulate if it's near target
 }

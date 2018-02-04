@@ -1,10 +1,3 @@
-/*
- * SwerveDrive.cpp
- *
- *  Created on: Mar 22, 2016
- *      Author: hstechclub
- */
-
 #include "SwerveDrive.h"
 #include "Joystick.h"
 #include "SmartDashboard/SmartDashboard.h"
@@ -118,7 +111,7 @@ void SwerveDrive::Update(float XIn, float YIn, float ZIn, float gyroValue)
 	controlType = a_ControlTypeChooser.GetSelected();
 
 	if (controlType == "") {
-		std::cout << "error reading control type" << std::endl;
+		// std::cout << "error reading control type" << std::endl;
 		return;
 	}
 	if(isTwisting) {

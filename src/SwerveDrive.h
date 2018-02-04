@@ -1,10 +1,3 @@
-/*
- * SwerveDrive.h
- *
- *  Created on: Mar 22, 2016
- *      Author: hstechclub
- */
-
 #pragma once
 
 #include <WPILib.h>
