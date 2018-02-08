@@ -12,14 +12,6 @@ const double MAX_RPM = 1000; // mod this in the future to a safe val; ensures co
 Shooter::Shooter(int firePort)
 : a_ShooterTennis(firePort)
 {
-	a_ShooterTennis.SetControlMode(CANTalon::kSpeed);
-	a_ShooterTennis.SetFeedbackDevice(CANTalon::CtreMagEncoder_Relative);
-	a_ShooterTennis.SetSensorDirection(true);
-	a_ShooterTennis.SetP(SHOOTER_P);
-	a_ShooterTennis.SetI(SHOOTER_I);
-	a_ShooterTennis.SetD(SHOOTER_D);
-	a_ShooterTennis.SetF(SHOOTER_F);
-	a_ShooterTennis.SetIzone(SHOOTER_IZONE);
 	a_ShooterTennis.Set(0);
 
 }
@@ -31,12 +23,13 @@ void Shooter::Set(float speed)
 
 float Shooter::GetSpeed()
 {
-	return a_ShooterTennis.GetSpeed();
+	return 0;
+	// return a_ShooterTennis.GetSpeed();
 }
 
 void Shooter::InvertQuad()
 {
-	a_ShooterTennis.SetSensorDirection(true);
+	// a_ShooterTennis.SetSensorDirection(true);
 }
 
 void Shooter::InvertFlyWheelMotor()
@@ -46,10 +39,7 @@ void Shooter::InvertFlyWheelMotor()
 
 void Shooter::SetWheelPIDF(float wheelP, float wheelI, float wheelD, float wheelF)
 {
-	a_ShooterTennis.SetP(wheelP);
-	a_ShooterTennis.SetI(wheelI);
-	a_ShooterTennis.SetD(wheelD);
-	a_ShooterTennis.SetF(wheelF);
+
 }
 
 

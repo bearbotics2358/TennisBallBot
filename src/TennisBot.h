@@ -15,7 +15,6 @@
 #include "SwerveModule.h"
 #include "SwerveDrive.h"
 #include "Shooter.h"
-#include "LightRingController.h"
 #include "SmartDashboard/SmartDashboard.h"
 #include "SmartDashboard/SendableChooser.h"
 
@@ -50,7 +49,7 @@ private:
 
 	Shooter a_Shooter;
 
-	LightRingController a_LRC;
+	// LightRingController a_LRC;
 
 	ADXL345_I2C a_Accelerometer;
 
