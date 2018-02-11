@@ -3,8 +3,8 @@
 
 #include "CompPrefs.h"
 
-#define JOYSTICK_PORT 0
-#define JOYSTICKTWO_PORT 5
+#define JOYSTICK_PORT 3
+#define JOYSTICKTWO_PORT 0
 
 #define PDP_PORT 3
 

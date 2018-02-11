@@ -65,11 +65,6 @@ void TennisBot::DisabledPeriodic()
 	SmartDashboard::PutNumber("Front Left Speed", a_FrontLeft.GetSpeed());
 	SmartDashboard::PutNumber("Back Right Speed", a_BackRight.GetSpeed());
 	SmartDashboard::PutNumber("Back Left Speed", a_BackLeft.GetSpeed());
-
-	SmartDashboard::PutNumber("Front Right Angle", a_FrontRight.GetAngle());
-	SmartDashboard::PutNumber("Front Left Angle", a_FrontLeft.GetAngle());
-	SmartDashboard::PutNumber("Back Right Angle", a_BackRight.GetAngle());
-	SmartDashboard::PutNumber("Back Left Angle", a_BackLeft.GetAngle());
 }
 
 void TennisBot::AutonomousInit()
@@ -125,12 +120,12 @@ void TennisBot::TeleopPeriodic()
 	SmartDashboard::PutNumber("Front Left Angle", a_FrontLeft.GetAngle());
 	SmartDashboard::PutNumber("Back Right Angle", a_BackRight.GetAngle());
 	SmartDashboard::PutNumber("Back Left Angle", a_BackLeft.GetAngle());
-
+	/*
 	SmartDashboard::PutNumber("Front Right Speed", a_FrontRight.GetSpeed());
 	SmartDashboard::PutNumber("Front Left Speed", a_FrontLeft.GetSpeed());
 	SmartDashboard::PutNumber("Back Right Speed", a_BackRight.GetSpeed());
 	SmartDashboard::PutNumber("Back Left Speed", a_BackLeft.GetSpeed());
-
+	*/
 }
 
 void TennisBot::TestInit()
